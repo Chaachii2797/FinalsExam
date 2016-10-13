@@ -47,12 +47,17 @@ public class VideoTable {
         values.put(VideoEntry.COL_TITLE, video.getTitle());
         values.put(VideoEntry.COL_DESCRIPTION, video.getDescription());
         values.put(VideoEntry.COL_THUMBNAIL_URL, video.getThumbnailUrl());
+
         return values;
     }
 
     private static Video createVideoFromCursor(Cursor cursor) {
-        // TODO: Implement this method
-        return null;
+        String id = cursor.getString(cursor.getColumnIndex(VideoEntry._ID));
+        String title = cursor.getString(cursor.getColumnIndex(VideoEntry.COL_TITLE));
+        String description = cursor.getString(cursor.getColumnIndex(VideoEntry.COL_DESCRIPTION));
+        String url = cursor.getString(cursor.getColumnIndex(VideoEntry.COL_THUMBNAIL_URL));
+
+        return new Video(id,title,description,url);
     }
 
     public static long insertVideo(Context context, Video video) {
@@ -121,9 +126,12 @@ public class VideoTable {
         List<Video> videos = new ArrayList<>();
         SQLiteDatabase db = null;
         Cursor cursor = null;
-
         try {
-            // TODO: Implement retrieval of all video items from the database
+
+            if (cursor.moveToFirst()) while (!cursor.isAfterLast()) {
+                String data = cursor.getString(cursor.getColumnIndex(VideoEntry._ID));
+                cursor.moveToNext();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
